@@ -1,0 +1,40 @@
+In this problem we are required to invert a binary tree.
+We have to modify the tree such that each left child becomes right child and vice versa.
+Because we need to perform this operation at all levels we need to create a recursive function.
+
+So i have created a function which will go down the tree until we reach the leaves.
+Then while climbing up the tree the position of the children are swapped.
+
+class Solution {
+    
+    public void traverse(TreeNode root)
+    {
+        if(root.left!=null) traverse(root.left);
+        if(root.right!=null) traverse(root.right);
+        TreeNode temp=root.left;
+        root.left=root.right;
+        root.right=temp;
+     }
+    
+    public TreeNode invertTree(TreeNode root) {
+        if(root==null) return root;
+        traverse(root);
+        return root;
+    }
+}
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
