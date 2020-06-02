@@ -1,0 +1,34 @@
+We are given the reference of the node which is to be deleted.
+We are also assured that it will not be the last node.
+
+So i am changing the value of current node to be equal to the next node till we reach the second last node.
+after assigning the value of last node to second last node, i am giving its next pointer a reference to null.
+
+Solution
+
+class Solution {
+    public void deleteNode(ListNode node) {
+        
+        while(node.next!=null)
+        {
+            node.val=node.next.val;
+            
+            if(node.next.next==null)
+            {
+                node.next=null;
+                break;
+            }
+            node=node.next;
+        }
+        
+    }
+}
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
