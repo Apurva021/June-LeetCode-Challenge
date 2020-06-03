@@ -1,0 +1,92 @@
+Before solving this problem, let us first solve an easier version of the problem.
+Suppose we did not have any resstriction on number of people in a city. That is, we could take each person to any city.
+Then while traversing over the array we would always choose the lower cost. Because it would result in a profit (higher-lower).
+Hence now we can conclude that we will get the aswer using a greedy strategy.
+
+But as we have restriction that both the cities should have exactly 'n' visitors we use another approach.
+Let us create an array of object of type pair(contains the cost of reaching both cities).
+The pair will an extra attribute called profit=(higher-lower)
+We will sort the pairs such that we get all the profits in descending order.
+Then while traversing over the array we will select lower cost, if that city does not already have 'n' visitors. Otherwise we will select higher cost.
+This greedy technique will give us the required answer.
+
+Solution:
+
+In the solution instead of creating the attribute profit in our class Pair, I have created the comparator which will take care of the
+sorting the Pair array according to profit values.
+
+class Solution {
+    public int twoCitySchedCost(int[][] costs) {
+        int n=costs.length;
+        Pair p[]=new Pair[n];
+        for(int i=0;i<n;++i)
+        {
+            p[i]=new Pair(costs[i][0],costs[i][1]);
+        }
+        Arrays.sort(p,new sortPair());
+        int c1=0,c2=0;
+        int sum=0;
+        for(int i=0;i<n;++i)
+        {
+            if(p[i].a<p[i].b)
+            {
+                if(c1<(n/2))
+                {
+                    sum+=p[i].a;
+                    c1++;
+                }
+                else
+                {
+                    sum+=p[i].b;
+                    c2++;
+                }
+            }
+            else
+            {
+                if(c2<(n/2))
+                {
+                    sum+=p[i].b;
+                    c2++;
+                }
+                else
+                {
+                    sum+=p[i].a;
+                    c1++;
+                }
+            }
+        }
+        
+        //System.out.println(Arrays.toString(p));
+        return sum;
+        
+    }
+}
+
+class Pair
+{
+    int a,b;
+    Pair(int x, int y)
+    {
+        a=x;
+        b=y;
+    }
+    
+    public String toString()
+    {
+    
+        String s="("+a+","+b+")";
+        return s;
+    }
+}
+
+class sortPair implements Comparator<Pair>
+{
+    public int compare(Pair p1,Pair p2)
+    {
+        int d1=Math.abs(p1.a-p1.b);
+        int d2=Math.abs(p2.a-p2.b);
+        
+        if(d1>d2) return -1;
+        else return 1;
+    }
+}
