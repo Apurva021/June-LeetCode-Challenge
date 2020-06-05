@@ -1,0 +1,24 @@
+So this is an easy problem.
+We just need to use 2 pointers and swap the characters.
+l=0,r=s.length-1
+Now while l<=r we swap the chars at 'l' and 'r'
+  increment 'l' and decrement 'r'
+And thats the solution.
+
+Solution:
+
+class Solution {
+    public void reverseString(char[] s) {
+        if(s.length==0) return;
+        int l=0,r=s.length-1;
+        
+        while(l<r)
+        {
+            char temp=s[l];
+            s[l]=s[r];
+            s[r]=temp;
+            l++;
+            r--;
+        }
+    }
+}
