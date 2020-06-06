@@ -1,0 +1,75 @@
+This is a really interesting question. Generating the original queue, based on the height of the individual and 
+number of people with height greater than or equal to him, in front of him.
+
+At first i was trying to think of a greedy solution by sorting the array, but when i saw that number of people<1100
+I realized that an O(n*n) solution would also work.
+
+Let us put all the pairs in a hashset and then make the field of number of people in front equal to zero.
+The important thing to realize now is that now we just need to keep on choosing the pair which is present in the hashset.
+Once we select the pair we should also increment the pairs which height less than the chosen pair.
+
+Solution:
+
+class Solution {
+    public int[][] reconstructQueue(int[][] people) {
+        int n=people.length;
+        HashSet<Pair> set = new HashSet<>();
+        int ans[][]=new int[n][2];
+        boolean visited[]=new boolean[n];
+        
+        for(int i=0;i<n;++i)
+        {
+            set.add(new Pair(people[i][0],people[i][1]));
+            people[i][1]=0;
+        }
+        
+        for(int i=0;i<n;++i)
+        {
+            int index=-1,min=Integer.MAX_VALUE-5;
+            for(int j=0;j<n;++j)
+            {
+                if(!visited[j] && set.contains(new Pair(people[j][0],people[j][1])) && min>people[j][0])
+                {
+                    index=j;
+                    min=people[j][0];
+                }
+            }
+            
+            ans[i][0]=people[index][0];
+            ans[i][1]=people[index][1];
+            visited[index]=true;
+            
+            for(int j=0;j<n;++j)
+            {
+                if(!visited[j] && people[j][0]<=min) people[j][1]++;
+            }
+        }
+        
+        return ans;
+    }
+}
+
+class Pair
+{
+    int h,k;
+    Pair(int ht, int kk)
+    {
+        h=ht;
+        k=kk;
+    }
+    
+    public int hashCode()
+    {
+        return h*31+k;
+    }
+    
+    public boolean equals(Object other)
+    {
+        if(other instanceof Pair)
+        {
+            Pair p=(Pair)other;
+            return (this.h==p.h && this.k==p.k);
+        }
+        else return false;
+    }
+}
