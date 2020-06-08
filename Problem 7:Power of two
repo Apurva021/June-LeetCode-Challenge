@@ -1,0 +1,22 @@
+As the name suggests we just have to determine if the given number is a power of 2.
+
+So if the number is less than equal to zero we return false.
+Otherwise we just keep dividing the number by 2 while it is greater than 1. And if it any point it is not divisible by 2, return false. 
+Else return true.
+
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        if(n<=0) return false;
+        boolean f=true;
+        while(n>1)
+        {
+            if(n%2!=0)
+            {
+                f=false;
+                break;
+            }
+            n/=2;
+        }
+        return f;
+    }
+}
