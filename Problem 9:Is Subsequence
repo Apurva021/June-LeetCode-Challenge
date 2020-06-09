@@ -1,0 +1,27 @@
+In this problem we just need to check whether all characters of the string s1 appear in string s2 in the same order.
+So let us consider a pointer 'j' for s1 and pointer i for s2.
+Now we just need to iterate over s2, and whenver we find that s2[i]==s1[j], we will increment j.
+After the iteration, if j==s2.length it implies that s1 is a subsequence of s2 else it is not.
+
+
+
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        int i,j;
+        for(i=0,j=0;j<s.length() && i<t.length();i++)
+        {
+            if(s.charAt(j)==t.charAt(i))
+            {
+                j++;
+            }
+        }
+        if(j==s.length())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
