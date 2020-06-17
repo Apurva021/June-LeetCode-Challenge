@@ -1,0 +1,95 @@
+This question is variation of a very common question, in which we have to find the number of islands completely surrounded by water.
+To solve that question see the link: https://leetcode.com/problems/number-of-islands/
+The key point is that we have to find the number of connected components.
+
+Now coming to this question, we have to change all 'O' to 'X' if and only none of the 'O' from the connected component lies on the edge.
+Now this task can be achieved using a simple bfs over the grid.
+We use a queue for the bfs. We also use another LinkedList 'change' to keep track of all the points in the current connected component.
+We use a boolean variable 'canChange' to keep track whether any of the point lies on the boundary.
+If any point lies on the boundary, we don't change anything.
+Else we change all 'O' to 'X' for the current component.
+
+
+Solution:
+
+The bound() function is used to check if the point satisfies the bound of the grid.
+The arrays dx[] and dy[] are used to push the neighbouring points into the queue.
+
+class Solution {
+    
+    int n,m;
+    int dx[]={1,-1,0,0},dy[]={0,0,1,-1};
+    boolean visited[][];
+    
+    public boolean bound(int x, int y)
+    {
+        return x>=0&&x<n&&y>=0&&y<m;
+    }
+    
+    public void bfs(int ii, int jj, char grid[][])
+    {
+        LinkedList<Pair> queue = new LinkedList<>();
+        LinkedList<Pair> change = new LinkedList<>();
+        boolean canChange=true;
+        queue.add(new Pair(ii,jj));
+        visited[ii][jj]=true;
+        
+        while(!queue.isEmpty())
+        {
+            Pair p=queue.pollFirst();
+            change.add(p);
+            int x=p.x,y=p.y;
+            
+            if(x==0 || x==n-1 || y==0 || y==m-1) canChange=false;
+            
+            for(int i=0;i<4;++i)
+            {
+                int xx=x+dx[i],yy=y+dy[i];
+                
+                if(bound(xx,yy) && grid[xx][yy]=='O' && !visited[xx][yy])
+                {
+                    visited[xx][yy]=true;
+                    queue.add(new Pair(xx,yy));
+                }
+            }
+        }
+        
+        if(canChange)
+        {
+            for(Pair p:change)
+            {
+                grid[p.x][p.y]='X';
+            }
+        }
+    }
+    
+    public void solve(char[][] grid) {
+        n=grid.length;
+        if(n==0) return;
+        m=grid[0].length;
+        visited=new boolean[n][m];
+        
+        for(int i=0;i<n;++i)
+        {
+            for(int j=0;j<m;++j)
+            {
+                if(grid[i][j]=='O' && !visited[i][j])
+                {
+                    bfs(i,j,grid);
+                }
+                else visited[i][j]=true;
+                
+            }
+        }
+        
+    }
+}
+class Pair
+{
+    int x,y;
+    Pair(int x, int y)
+    {
+        this.x=x;
+        this.y=y;
+    }
+}
