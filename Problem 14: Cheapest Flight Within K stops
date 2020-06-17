@@ -1,0 +1,94 @@
+This is a really great question!
+But the key observation here is that whenever we have to find the shortest path with positive weighted edges using only fixed number
+of stops we can utilize the Dijkstra's algorithm.
+
+The basic idea is to use a heap (PriorityQueue for java users).
+Inside the heap we need to store 3 things: the current city, cost of reaching that city from src and number of stops.
+In order to store all these details I have created the class Pair.
+In the Pair class:
+v--> the current city
+w--> the cost of reaching that city from src
+kval--> the number of stops
+
+We are using a heap, because it will return to us the 'current city' with least 'w' in O(log n).
+Initialy we insert the (src,0,0) into the queue.
+
+Then while the queue is not empty:
+1. We retrieve the current city 'v' closest to source.
+2. If 'v' is dst and the number if stops<=k then we just return 'w' corresponding to 'v'.
+3. If 'v' is not dst and the number of stops is less than 'k' we insert all the cities reachable from 'v' and decrease the kval by 1.
+4. Repeat.
+
+
+An important note is that as soon as we reach dst for the first time, it will be the shortest distance possible because at each step
+we are getting the closest city from the heap.
+
+Solution:
+class Solution {
+    
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        ArrayList<Pair> al[]=new ArrayList[n];
+        for(int i=0;i<n;++i) al[i]=new ArrayList<Pair>();
+        //int dist[]=new int[n];
+        for(int i=0;i<flights.length;++i)
+        {
+            int u=flights[i][0],v=flights[i][1],w=flights[i][2];
+            al[u].add(new Pair(v,w));
+        }
+        //Arrays.fill(dist,(int)1e9);
+        //dist[src]=0;
+        int ans=(int)1e9;
+        PriorityQueue<Pair> pq = new PriorityQueue<>();
+        pq.add(new Pair(src,0,0));
+        
+        while(!pq.isEmpty())
+        {
+            Pair curr = pq.poll();
+            int v=curr.v,d=curr.w,kval=curr.kval;
+            if(v==dst)
+            {
+                return d;
+            }
+            if(kval==k+1) continue;
+            
+            for(Pair next:al[v])
+            {
+                pq.add(new Pair(next.v,d+next.w,kval+1));
+            }
+            
+            //System.out.println(pq);
+        }
+        
+        return -1;
+        
+    }
+}
+
+class Pair implements Comparable<Pair>
+{
+    int v,w,kval;
+    Pair(int v, int w)
+    {
+        this.v=v;
+        this.w=w;
+        this.kval=-1;
+    }
+    
+    Pair(int v, int w, int kval)
+    {
+        this.v=v;
+        this.w=w;
+        this.kval=kval;
+    }
+    
+    public int compareTo(Pair p)
+    {
+        return this.w-p.w;
+    }
+    
+    public String toString()
+    {
+        String s="("+v+","+w+","+kval+")";
+        return s;
+    }
+}
