@@ -1,0 +1,49 @@
+The questions is quite simple to understand. We need to find the Kth permutation of 'n' digit number. n<=9.
+
+The key observation which is required to solve this question is that the first (n-1)! permutations will have '1' as the first digit.
+Then next (n-1)! permutations will have '2' as the first digit. And so on.
+So now while(counter*factorial(n-i-1)<k) we will go on increasing the counter.
+And then the first digit of the permutation will be the Qth smallest number available where Q=counter.
+
+Now we can use the same process as above for finding the ith digit of our answer.
+We just need to pre-compute all the factorials till 9.
+And i have used the PriorityQueue(min-Heap) in order to find the Q-th smallest digit in (Q*log n) time.
+
+Solution:
+
+class Solution {
+    public String getPermutation(int n, int k) {
+        int ans[]=new int[n];
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        for(int i=1;i<=n;++i) pq.add(i);
+        
+        int fact[]=new int[n+1];
+        fact[0]=1;
+        for(int i=1;i<=n;++i) fact[i]=fact[i-1]*i;
+        
+        for(int i=0;i<n;++i)
+        {
+            int counter=1;
+            HashSet<Integer> set = new HashSet<Integer>();
+            while((counter*fact[n-i-1])<k)
+            {
+                counter++;
+            }
+            
+            k-=((counter-1)*fact[n-i-1]);
+            
+            while(counter>1)
+            {
+                set.add(pq.poll());
+                counter--;
+            }
+            
+            ans[i]=pq.poll();
+            for(int s:set) pq.add(s);
+        }
+        
+        StringBuilder sb=new StringBuilder();
+        for(int a:ans) sb.append(a);
+        return sb.toString();
+    }
+}
