@@ -1,0 +1,42 @@
+Each node of the tree consists of a single digit from 0-9.
+We have to move from the root node to leaf node through different paths, and our answer is the sum of all numbers which are made while traversing over the different paths.
+
+To achieve this i have created a function taking 2 parameters, the reference to current node, and the value till now.
+Now the important thing to note here is that whenever we append a digit to a number the it happens in this way:
+currValue=(currValue*10)+currDigit
+Then if the current node has any child node we call the function again recursively.
+If the node does not have any child we just add the currValue to our answer.
+
+Solution:
+class Solution {
+    int ans=0;
+    public int sumNumbers(TreeNode root) {
+        if(root==null) return 0;
+        solve(root,0);
+        return ans;
+    }
+    
+    public void solve(TreeNode root,int currVal)
+    {
+        currVal=(10*currVal)+root.val;
+        if(root.left==null && root.right==null) ans+=currVal;
+        if(root.left!=null) solve(root.left,currVal);
+        if(root.right!=null) solve(root.right,currVal);
+    }
+}
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
