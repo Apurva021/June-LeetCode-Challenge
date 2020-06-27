@@ -1,0 +1,40 @@
+In this question we are asked to find what is the minimum number of perfect squares that can make a sum of 'n'.
+This problem is extremely similar to the coin change problem where we have to find the minimum number of coins which will make a change of 'n' rupees.
+For every coin we have 2 choices should we include this coin in our change or not.
+So using the same principle i have created a dp[][] array.
+Here dp[i][j] represents minimum number of perfect square numbers which are required to make sum 'j' using the first 'i' square numbers less than 'n'.
+I have created an arraylist squares to keep track of all the perfect squares less than 'n'
+The transistions will be dp[i][j]=Math.min(dp[i][j],dp[i][j-squares.get(i-1)+1]);
+
+Solution:
+
+class Solution {
+    public int numSquares(int n) {
+        ArrayList<Integer> squares= new ArrayList<>();
+        for(int i=1;i*i<=n;++i) squares.add(i*i);
+        
+        //System.out.println(squares);
+        
+        int m=squares.size();
+        int dp[][]=new int[m+1][n+1];
+        for(int i=0;i<=m;++i) Arrays.fill(dp[i],Integer.MAX_VALUE-5);
+        dp[0][0]=0;
+        for(int i=1;i<=m;++i)
+        {
+            dp[i][0]=0;
+            for(int j=1;j<=n;++j)
+            {
+                if(j-squares.get(i-1)>=0)
+                {
+                    dp[i][j]=Math.min(dp[i][j],dp[i-1][j]);
+                    dp[i][j]=Math.min(dp[i][j-squares.get(i-1)]+1,dp[i][j]);
+                }
+                else dp[i][j]=Math.min(dp[i-1][j],dp[i][j]);
+            }
+        }
+        
+        //for(int i=0;i<=m;++i) System.out.println(Arrays.toString(dp[i]));
+        
+        return dp[m][n];
+    }
+}
