@@ -1,0 +1,22 @@
+This is a standard dynamic programming question where we have to find the number of ways of reaching from to source to destination in a grid, when wew can only move right or down.
+Because from every cell we can only move in 2 direction, it becomes simple to find the state transition.
+grid[i][j] represents the number of unique ways of reaching the cell (i,j)
+grid[i][j]=grid[i-1][j]+grid[i][j-1].
+The above transition holds true because there are only two ways of reching a particular cell.
+If we know the number of ways of reaching grid[i-1][j] and grid[i][j-1], we take their sum to find the number of ways of reaching grid[i][j].
+
+Solution:
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int grid[][]=new int[m+1][n+1];
+        grid[1][1]=1;
+        for(int i=1;i<=m;++i)
+        {
+            for(int j=1;j<=n;++j)
+            {
+                grid[i][j]+=grid[i-1][j]+grid[i][j-1];
+            }
+        }
+        return grid[m][n];
+    }
+}
